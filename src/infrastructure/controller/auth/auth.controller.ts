@@ -4,15 +4,23 @@ import { LoginDto } from './dto/login.dto';
 import { ReqUser } from '@/infrastructure/common/decorators/req-user.decorator';
 import { User } from '@/infrastructure/db/entities/user.entity';
 import { LoginGuard } from '@/infrastructure/common/guards/login.guard';
+import { RegisterUseCase } from '@/use-case/auth/register.use-case';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly loginUseCase: LoginUseCase) {}
+    constructor(
+        private readonly loginUseCase: LoginUseCase,
+        private readonly registerUseCase: RegisterUseCase,
+    ) {}
 
     @Post('login')
     @UseGuards(LoginGuard)
-    async login(@Body() loginDto: LoginDto, @ReqUser() user: User) {
-        console.log(user);
-        return;
+    async login(@Body() _: LoginDto, @ReqUser() user: User) {
+        return await this.loginUseCase.getJwtToken(user.id);
+    }
+
+    @Post('register')
+    async register(@Body() { username, password }: LoginDto) {
+        return this.registerUseCase.execute(username, password);
     }
 }

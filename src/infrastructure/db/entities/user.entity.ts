@@ -29,7 +29,7 @@ export class User {
     @Column({ enum: Role })
     role: Role;
 
-    @Column({ unsigned: true, type: 'float' })
+    @Column({ unsigned: true, type: 'float', default: 0 })
     balance: number;
 
     @OneToMany(() => Transaction, (t) => t.owner)
