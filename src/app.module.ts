@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { HelloControllerModule } from './infrastructure/controller/hello/hello-controller.module';
-import { MikroOrmInterceptor } from './infrastructure/common/interceptor/mikro-orm.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { EnvConfigModule } from './infrastructure/config/env/env.module';
+import { AuthControllerModule } from './infrastructure/controller/auth/auth-controller.module';
+import { AuthModule } from './use-case/auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './infrastructure/common/strategies/jwt.strategy';
+import { LocalStrategy } from './infrastructure/common/strategies/local.strategy';
 
 @Module({
-    imports: [HelloControllerModule],
-    providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: MikroOrmInterceptor,
-        },
+    imports: [
+        EnvConfigModule,
+        AuthModule,
+        PassportModule,
+        AuthControllerModule,
     ],
+    providers: [JwtStrategy, LocalStrategy],
 })
 export class AppModule {}

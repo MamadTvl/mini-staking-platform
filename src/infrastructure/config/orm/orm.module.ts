@@ -2,6 +2,7 @@ import { Config } from '@/domain/config/config.interface';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 
 @Module({
     imports: [
@@ -17,7 +18,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                     username: conf.user,
                     password: conf.password,
                     database: conf.name,
-                    entities: ['infrastructure/db/entities/*.entity.{js,ts}'],
+                    entities: [
+                        path.resolve(
+                            __dirname,
+                            '../../db/entities/*.entity.{js,ts}',
+                        ),
+                    ],
                     synchronize: false,
                 };
             },
