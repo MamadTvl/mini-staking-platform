@@ -17,7 +17,7 @@ export class UserRepository {
     async findByUsernameWithPassword(username: string): Promise<User> {
         return this.userDatabaseRepository.findOne({
             where: { username },
-            select: { password: true, id: true, username: true },
+            select: { password: true, id: true, username: true, role: true },
         });
     }
 
@@ -35,5 +35,27 @@ export class UserRepository {
             password: hashedPassword,
             role,
         });
+    }
+
+    async increaseBalance(userId: number, amount: number) {
+        return this.userDatabaseRepository
+            .createQueryBuilder('user')
+            .update()
+            .set({
+                balance: () => `balance + ${amount}`,
+            })
+            .where('id = :userId', { userId })
+            .execute();
+    }
+
+    async decreaseBalance(userId: number, amount: number) {
+        return this.userDatabaseRepository
+            .createQueryBuilder('user')
+            .update()
+            .set({
+                balance: () => `GREATEST(balance - ${amount}, 0)`,
+            })
+            .where('id = :userId', { userId })
+            .execute();
     }
 }
