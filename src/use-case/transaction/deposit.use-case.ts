@@ -6,6 +6,7 @@ import {
 import { TransactionRepository } from '@/infrastructure/repository/transaction.repository';
 import { UserRepository } from '@/infrastructure/repository/user.repository';
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class DepositUseCase implements DepositIntractor {
@@ -25,6 +26,7 @@ export class DepositUseCase implements DepositIntractor {
         );
     }
 
+    @Transactional()
     async depositAcceptedTransaction(
         userId: number,
         amount: number,

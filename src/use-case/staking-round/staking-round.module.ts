@@ -2,7 +2,7 @@ import { RepositoriesModule } from '@/infrastructure/repository/repositories.mod
 import { forwardRef, Module } from '@nestjs/common';
 import { ProfitDistributionUseCase } from './profit-distribution.use-case';
 import { ProfitRateUseCase } from './profit-rate.use-case';
-import { RoundLifecycleUseCase } from './round-lifecycle.use-case';
+import { RoundUseCase } from './round.use-case';
 import { TransactionModule } from '../transaction/transaction.module';
 import { JobsModule } from '@/infrastructure/job/job.module';
 import { ProfitQueueService } from '@/infrastructure/services/bull/profit-queue.service';
@@ -17,12 +17,12 @@ import { BullQueueModule } from '@/infrastructure/services/bull/bull-queue.modul
     providers: [
         ProfitDistributionUseCase,
         ProfitRateUseCase,
-        RoundLifecycleUseCase,
+        RoundUseCase,
     ],
     exports: [
         ProfitDistributionUseCase,
         ProfitRateUseCase,
-        RoundLifecycleUseCase,
+        RoundUseCase,
     ],
 })
 export class StakingRoundModule {}

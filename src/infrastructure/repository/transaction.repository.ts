@@ -36,6 +36,7 @@ export class TransactionRepository {
     ) {
         const transaction = await this.transactionDbRepository.findOne({
             where: { id, status: TransactionStatus.Pending },
+            relations: ['owner'],
         });
         if (!transaction) {
             throw new Error('Transaction Not Found');

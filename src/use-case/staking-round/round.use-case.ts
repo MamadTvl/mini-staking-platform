@@ -1,17 +1,22 @@
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
-import { RoundLifecycleIntractor } from './../../domain/intractor/staking-round/round-lifecycle.intractor';
+import {
+    GetRoundsIntractor,
+    RoundLifecycleIntractor,
+} from '@/domain/intractor/staking-round/round-lifecycle.intractor';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as moment from 'moment';
-import { InjectQueue } from '@nestjs/bullmq';
-import { openStakingRound } from '@/domain/constant/queue';
+import { StakingRound } from '@/infrastructure/db/entities/staking-round.entity';
 
 @Injectable()
-export class RoundLifecycleUseCase
-    implements RoundLifecycleIntractor, OnModuleInit
+export class RoundUseCase
+    implements RoundLifecycleIntractor, OnModuleInit, GetRoundsIntractor
 {
     constructor(
         private readonly stakingRoundRepository: StakingRoundRepository,
     ) {}
+    getMany(): Promise<StakingRound[]> {
+        return this.stakingRoundRepository.findMany();
+    }
 
     async onModuleInit() {
         const stakingRound = await this.stakingRoundRepository.findOpenRound();

@@ -1,9 +1,10 @@
-import { RoundBalanceRepository } from './../../infrastructure/repository/staking-round-balance.repository';
+import { RoundBalanceRepository } from '@/infrastructure/repository/staking-round-balance.repository';
 import { ProfitDistributionIntractor } from '@/domain/intractor/staking-round/profit-distribution.intractor';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
 import { Injectable } from '@nestjs/common';
 import { DepositUseCase } from '../transaction/deposit.use-case';
 import { StakingRoundStatus } from '@/infrastructure/db/entities/staking-round.entity';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class ProfitDistributionUseCase implements ProfitDistributionIntractor {
@@ -12,25 +13,8 @@ export class ProfitDistributionUseCase implements ProfitDistributionIntractor {
         private readonly stakingRoundRepository: StakingRoundRepository,
         private readonly depositUseCase: DepositUseCase,
     ) {}
-    async calculateAverageBalances(stakingRoundId: number) {
-        const stakingRound = await this.stakingRoundRepository.findOne(
-            stakingRoundId,
-        );
-        if (!stakingRound) {
-            throw new Error('StakingRoundMissing');
-        }
-        const [year, month] = stakingRound.date.split('-');
-        await this.roundBalanceRepository.updateBalances(
-            stakingRoundId,
-            year,
-            month,
-        );
-        await this.stakingRoundRepository.updateStatus(
-            stakingRoundId,
-            StakingRoundStatus.Calculated,
-        );
-    }
 
+    @Transactional()
     async distribute(stakingRoundId: number): Promise<void> {
         const stakingRound = await this.stakingRoundRepository.findOne(
             stakingRoundId,

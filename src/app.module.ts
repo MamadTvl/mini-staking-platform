@@ -8,6 +8,8 @@ import { LocalStrategy } from './infrastructure/common/strategies/local.strategy
 import { JobsModule } from './infrastructure/job/job.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BalanceSnapshotCronModule } from './infrastructure/cron/balance-snapshot/balance-snapshot-cron.module';
+import { TransactionControllerModule } from './infrastructure/controller/transaction/transaction-controller.module';
+import { StakingRoundControllerModule } from './infrastructure/controller/staking-round/staking-round-controller.module';
 
 @Module({
     imports: [
@@ -16,6 +18,8 @@ import { BalanceSnapshotCronModule } from './infrastructure/cron/balance-snapsho
         AuthModule,
         PassportModule,
         AuthControllerModule,
+        TransactionControllerModule,
+        StakingRoundControllerModule,
         JobsModule,
         BalanceSnapshotCronModule,
     ],

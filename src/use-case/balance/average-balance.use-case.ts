@@ -3,6 +3,7 @@ import { StakingRoundStatus } from '@/infrastructure/db/entities/staking-round.e
 import { RoundBalanceRepository } from '@/infrastructure/repository/staking-round-balance.repository';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class AverageBalanceUseCase implements AverageBalanceIntractor {
@@ -11,6 +12,7 @@ export class AverageBalanceUseCase implements AverageBalanceIntractor {
         private readonly stakingRoundRepository: StakingRoundRepository,
     ) {}
 
+    @Transactional()
     async calculate(stakingRoundId: number): Promise<void> {
         const stakingRound = await this.stakingRoundRepository.findOne(
             stakingRoundId,

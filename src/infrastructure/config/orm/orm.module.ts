@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
 @Module({
     imports: [
@@ -26,6 +28,13 @@ import * as path from 'path';
                     ],
                     synchronize: false,
                 };
+            },
+            async dataSourceFactory(options) {
+                if (!options) {
+                    throw new Error('Invalid options passed');
+                }
+
+                return addTransactionalDataSource(new DataSource(options));
             },
         }),
     ],

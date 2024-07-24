@@ -7,6 +7,7 @@ import {
 import { TransactionRepository } from '@/infrastructure/repository/transaction.repository';
 import { UserRepository } from '@/infrastructure/repository/user.repository';
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class TransactionReviewUseCase implements TransactionReviewIntractor {
@@ -25,6 +26,7 @@ export class TransactionReviewUseCase implements TransactionReviewIntractor {
         );
     }
 
+    @Transactional()
     async approveTransaction(id: number, taxPercentage: number): Promise<void> {
         const transaction =
             await this.transactionRepository.updatePendingTransaction(

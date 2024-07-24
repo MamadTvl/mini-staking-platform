@@ -5,7 +5,9 @@ import { ReqUser } from '@/infrastructure/common/decorators/req-user.decorator';
 import { User } from '@/infrastructure/db/entities/user.entity';
 import { LoginGuard } from '@/infrastructure/common/guards/login.guard';
 import { RegisterUseCase } from '@/use-case/auth/register.use-case';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(
