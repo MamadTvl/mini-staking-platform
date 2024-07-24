@@ -2,11 +2,15 @@
 
 ## Installation
 
+Ensure you have Docker installed, or use your own PostgreSQL and Redis databases.
+
+Install dependencies using Yarn:
+
 ```bash
 yarn
 ```
 
-## Running the app in development
+## Running the App in Development
 
 ```bash
 # development
@@ -19,25 +23,31 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Docker
+## Docker Compose
+
+To run the application using Docker, use the following commands:
 
 ```bash
 docker compose up -d
 ```
 
+If above command didn't work, build the Docker image, pull images, and start the containers:
+
 ```bash
 docker compose build && docker compose pull && docker compose up -d
 ```
 
-## Swagger
+## Swagger / Postman
 
-You can visit the Swagger documentation in <http://localhost:3000/api/docs> .
+Access the Swagger documentation at: <http://localhost:3000/api/docs>.
 
-If you prefer to use postman, download the openapi json file and import it. (<http://localhost:3000/api/docs-json>)
+For Postman users, download the OpenAPI JSON file and import it from: <http://localhost:3000/api/docs-json>.
 
 ## Admin Access
 
-the default admin's username and password can be modified with environment variables.
+You can modify the default admin username and password using [environment variables](.env.example).
+
+Default credentials:
 
 ```
 username: admin
