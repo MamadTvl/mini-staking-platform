@@ -21,7 +21,7 @@ export class BalanceSnapshotRepository {
             select
                 balance,
                 id as user_id,
-                ${date} as date
+                '${date}' as date
             from
                 users 
             on conflict do nothing`);

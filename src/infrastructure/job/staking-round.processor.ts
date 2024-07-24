@@ -2,7 +2,9 @@ import { RoundLifecycleUseCase } from '@/use-case/staking-round/round-lifecycle.
 import { openStakingRound } from '@/domain/constant/queue';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { defaultWorkerOptions } from '../config/bull/bull.config';
-import { UnrecoverableError } from 'bullmq';
+import { Job, UnrecoverableError } from 'bullmq';
+
+export type StakingRoundJobData = { date: string };
 
 @Processor(openStakingRound, defaultWorkerOptions)
 export class StakingRoundProcessor extends WorkerHost {
@@ -10,9 +12,10 @@ export class StakingRoundProcessor extends WorkerHost {
         super();
     }
 
-    async process(): Promise<any> {
+    async process(job: Job<StakingRoundJobData>): Promise<any> {
+        const { date } = job.data;
         try {
-            await this.roundLifecycleUseCase.startStakingRound();
+            await this.roundLifecycleUseCase.startStakingRound(date);
         } catch (err) {
             if (err instanceof Error) {
                 throw new UnrecoverableError();

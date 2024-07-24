@@ -1,4 +1,5 @@
 import {
+    RecoverMissedSnapshotIntractor,
     SnapshotIntractor,
     SnapshotJobIntractor,
 } from '@/domain/intractor/balance/snapshot.intractor';
@@ -8,17 +9,26 @@ import * as moment from 'moment';
 import { AverageBalanceUseCase } from './average-balance.use-case';
 import { SnapshotQueueService } from '@/infrastructure/services/bull/snapshot-queue.service';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
+import { StakingRoundQueueService } from '@/infrastructure/services/bull/staking-round-queue.service';
 
 @Injectable()
 export class SnapshotUseCase
-    implements SnapshotIntractor, SnapshotJobIntractor
+    implements
+        SnapshotIntractor,
+        SnapshotJobIntractor,
+        RecoverMissedSnapshotIntractor
 {
     constructor(
         private readonly snapshotRepository: BalanceSnapshotRepository,
         private readonly stakingRoundRepository: StakingRoundRepository,
         private readonly averageBalanceUseCase: AverageBalanceUseCase,
         private readonly snapshotQueueService: SnapshotQueueService,
+        private readonly stakingRoundQueueService: StakingRoundQueueService,
     ) {}
+
+    checkAndRecover(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 
     async addSnapshotJob(date: moment.Moment): Promise<void> {
         const snapshotMoment = date.utcOffset(0).subtract(5, 'minute');
@@ -37,11 +47,20 @@ export class SnapshotUseCase
         if (!stakingRound) {
             throw new Error('StakingRoundNotFound');
         }
+        const isRoundConcluded = snapshotDate === endDayOfMonthDate;
         await this.snapshotQueueService.addJob({
             date: snapshotDate,
-            withAverageCalculation: snapshotDate === endDayOfMonthDate,
+            withAverageCalculation: isRoundConcluded,
             stakingRoundId: stakingRound.id,
         });
+        if (isRoundConcluded) {
+            await this.stakingRoundQueueService.addJob(
+                snapshotMoment
+                    .add(1, 'month')
+                    .startOf('month')
+                    .format('YYYY-MM-DD'),
+            );
+        }
     }
 
     async snapshotBalances(

@@ -1,5 +1,6 @@
 import { ProfitRateIntractor } from '@/domain/intractor/staking-round/profit-rate.intractor';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
+import { ProfitQueueService } from '@/infrastructure/services/bull/profit-queue.service';
 import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 
@@ -7,6 +8,7 @@ import * as moment from 'moment';
 export class ProfitRateUseCase implements ProfitRateIntractor {
     constructor(
         private readonly stakingRoundRepository: StakingRoundRepository,
+        private readonly profitQueueService: ProfitQueueService,
     ) {}
 
     async addProfitRate(id: number, percentage: number): Promise<void> {
@@ -21,5 +23,6 @@ export class ProfitRateUseCase implements ProfitRateIntractor {
             throw new Error('AlreadyAdded');
         }
         await this.stakingRoundRepository.updateProfitRate(id, percentage);
+        await this.profitQueueService.addJob(id);
     }
 }

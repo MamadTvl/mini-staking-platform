@@ -11,3 +11,7 @@ export interface SnapshotIntractor {
 export interface SnapshotJobIntractor {
     addSnapshotJob(date: Moment): Promise<void>;
 }
+
+export interface RecoverMissedSnapshotIntractor {
+    checkAndRecover(): Promise<void>;
+}

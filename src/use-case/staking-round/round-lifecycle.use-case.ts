@@ -14,10 +14,6 @@ export class RoundLifecycleUseCase
     ) {}
 
     async onModuleInit() {
-        await this.startStakingRound();
-    }
-
-    async startStakingRound(): Promise<void> {
         const stakingRound = await this.stakingRoundRepository.findOpenRound();
         if (stakingRound) {
             return;
@@ -25,5 +21,18 @@ export class RoundLifecycleUseCase
         await this.stakingRoundRepository.save(
             moment().startOf('month').format('YYYY-MM-DD'),
         );
+    }
+
+    async startStakingRound(date: string): Promise<void> {
+        const startDayOfMonth = moment(date, 'YYYY-MM-DD')
+            .startOf('month')
+            .format('YYYY-MM-DD');
+        const stakingRound = await this.stakingRoundRepository.findWithDate(
+            startDayOfMonth,
+        );
+        if (stakingRound) {
+            return;
+        }
+        await this.stakingRoundRepository.save(startDayOfMonth);
     }
 }

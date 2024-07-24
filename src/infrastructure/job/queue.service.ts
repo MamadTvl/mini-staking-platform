@@ -8,11 +8,13 @@ import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { ProfitProcessorJobData } from './profit.processor';
 import { SnapshotJobData } from './snapshot.processor';
+import { StakingRoundJobData } from './staking-round.processor';
 
 @Injectable()
 export class QueueService {
     constructor(
-        @InjectQueue(openStakingRound) public openStakingRoundQueue: Queue,
+        @InjectQueue(openStakingRound)
+        public openStakingRoundQueue: Queue<StakingRoundJobData>,
         @InjectQueue(balanceSnapshot)
         public balanceSnapshotQueue: Queue<SnapshotJobData>,
         @InjectQueue(profitDistribution)
