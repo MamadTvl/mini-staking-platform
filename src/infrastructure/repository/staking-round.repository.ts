@@ -17,6 +17,10 @@ export class StakingRoundRepository {
         return this.stakingRoundDbRepository.findOne({ where: { id } });
     }
 
+    findWithDate(date: string) {
+        return this.stakingRoundDbRepository.findOne({ where: { date } });
+    }
+
     findOpenRound() {
         return this.stakingRoundDbRepository.findOne({
             where: { status: StakingRoundStatus.Open },
