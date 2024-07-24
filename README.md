@@ -34,3 +34,12 @@ docker compose build && docker compose pull && docker compose up -d
 You can visit the Swagger documentation in <http://localhost:3000/api/docs> .
 
 If you prefer to use postman, download the openapi json file and import it. (<http://localhost:3000/api/docs-json>)
+
+## Admin Access
+
+the default admin's username and password can be modified with environment variables.
+
+```
+username: admin
+password: admin
+```
