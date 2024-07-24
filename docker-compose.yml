@@ -1,0 +1,48 @@
+version: '3'
+
+networks:
+  service-net:
+
+
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    container_name: postgres
+    ports:
+      - "127.0.0.1:9087:5432"
+    volumes:
+      - ./docker-data:/var/lib/postgresql/data/pgdata
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - service-net
+
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: redis
+    command: --requirepass 1234
+    ports:
+      - "127.0.0.1:9088:6379"
+    environment:
+      - REDIS_PASSWORD=1234
+    networks:
+      - service-net
+  app: 
+    image: mini-staking
+    restart: always
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - compose.env
+    networks:
+      - service-net
+      

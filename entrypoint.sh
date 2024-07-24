@@ -1,2 +1,2 @@
-yarn mikro-orm migration:up \
+yarn migration:prod \
 && yarn start:prod
