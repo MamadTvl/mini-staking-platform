@@ -14,7 +14,7 @@ export class DepositUseCase implements DepositIntractor {
         private readonly userRepository: UserRepository,
     ) {}
 
-    async askForDepositTransaction(
+    async requestForDepositTransaction(
         userId: number,
         amount: number,
     ): Promise<void> {

@@ -5,9 +5,11 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Unique,
 } from 'typeorm';
 import { User } from './user.entity';
 
+@Unique('user_date_balance_unique', ['user', 'date'])
 @Entity({ name: 'balance_snapshots' })
 export class BalanceSnapshot {
     @PrimaryGeneratedColumn('increment')
@@ -20,7 +22,7 @@ export class BalanceSnapshot {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ type: 'date', unique: true })
+    @Column({ type: 'date' })
     date: string;
 
     @CreateDateColumn({

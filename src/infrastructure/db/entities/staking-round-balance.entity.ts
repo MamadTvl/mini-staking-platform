@@ -17,8 +17,11 @@ export class StakingRoundBalance {
     @Column({ nullable: false, primary: true, name: 'staking_round_id' })
     stakingRoundId: number;
 
-    @Column({ unsigned: true, type: 'float' })
+    @Column({ unsigned: true, type: 'float', name: 'average_balance' })
     averageBalance: number;
+
+    @Column({ unsigned: true, type: 'int', name: 'snapshot_count' })
+    snapshotCount: number;
 
     @ManyToOne(() => User, (user) => user.stakingRounds)
     @JoinColumn({ name: 'user_id' })
