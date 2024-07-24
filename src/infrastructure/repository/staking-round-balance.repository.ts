@@ -32,7 +32,7 @@ export class RoundBalanceRepository {
         from
             balance_snapshots bs
         where
-            extract(month from bs.date) = ${month} and extract(year from bs.date) = ${year}
+            extract(month from bs.date) = '${month}' and extract(year from bs.date) = '${year}'
         group by
             bs.user_id 
         on conflict (user_id,staking_round_id) do
