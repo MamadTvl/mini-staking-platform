@@ -14,6 +14,12 @@ export class UserRepository {
         return this.userDatabaseRepository.findOne({ where: { id } });
     }
 
+    async isAdminExists() {
+        return this.userDatabaseRepository.exists({
+            where: { role: Role.Admin },
+        });
+    }
+
     async findByUsernameWithPassword(username: string): Promise<User> {
         return this.userDatabaseRepository.findOne({
             where: { username },

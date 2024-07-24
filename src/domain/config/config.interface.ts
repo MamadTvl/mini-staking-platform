@@ -18,4 +18,8 @@ export interface Config {
         secret: string;
         expireTime: string;
     };
+    admin: {
+        username: string;
+        password: string;
+    };
 }

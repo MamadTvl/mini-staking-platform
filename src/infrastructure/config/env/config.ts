@@ -20,4 +20,8 @@ export default (): Config => ({
         secret: process.env.JWT_SECRET,
         expireTime: process.env.JWT_EXPIRE_TIME,
     },
+    admin: {
+        username: process.env.ADMIN_USERNAME,
+        password: process.env.ADMIN_PASSWORD,
+    },
 });
