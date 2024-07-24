@@ -10,6 +10,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BalanceSnapshotCronModule } from './infrastructure/cron/balance-snapshot/balance-snapshot-cron.module';
 import { TransactionControllerModule } from './infrastructure/controller/transaction/transaction-controller.module';
 import { StakingRoundControllerModule } from './infrastructure/controller/staking-round/staking-round-controller.module';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { UseCaseFilter } from './infrastructure/common/filter/use-case.filter';
+import { ResponseInterceptor } from './infrastructure/common/interceptor/response.interceptor';
 
 @Module({
     imports: [
@@ -23,6 +26,11 @@ import { StakingRoundControllerModule } from './infrastructure/controller/stakin
         JobsModule,
         BalanceSnapshotCronModule,
     ],
-    providers: [JwtStrategy, LocalStrategy],
+    providers: [
+        JwtStrategy,
+        LocalStrategy,
+        { provide: APP_FILTER, useClass: UseCaseFilter },
+        { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
+    ],
 })
 export class AppModule {}

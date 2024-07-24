@@ -1,3 +1,4 @@
+import { StakingRoundException } from '@/domain/exception/staking-round-exception.enum';
 import { AverageBalanceIntractor } from '@/domain/intractor/balance/average-balance.intractor';
 import { StakingRoundStatus } from '@/infrastructure/db/entities/staking-round.entity';
 import { RoundBalanceRepository } from '@/infrastructure/repository/staking-round-balance.repository';
@@ -18,7 +19,7 @@ export class AverageBalanceUseCase implements AverageBalanceIntractor {
             stakingRoundId,
         );
         if (!stakingRound) {
-            throw new Error('StakingRoundMissing');
+            throw new Error(StakingRoundException.StakingRoundNotFound);
         }
         const [year, month] = stakingRound.date.split('-');
         await this.roundBalanceRepository.updateBalances(

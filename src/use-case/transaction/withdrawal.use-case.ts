@@ -1,3 +1,4 @@
+import { TransactionException } from '@/domain/exception/transaction-exception.enum';
 import { WithdrawalIntractor } from '@/domain/intractor/transaction/withdrawal.intractor';
 import { TransactionType } from '@/infrastructure/db/entities/transaction.entity';
 import { TransactionRepository } from '@/infrastructure/repository/transaction.repository';
@@ -18,7 +19,7 @@ export class WithdrawalUseCase implements WithdrawalIntractor {
                 userId,
             );
         if (balance - totalWithdrawRequests < amount) {
-            throw new Error('Insufficient Balance');
+            throw new Error(TransactionException.InsufficientBalance);
         }
         await this.transactionRepository.save(
             userId,

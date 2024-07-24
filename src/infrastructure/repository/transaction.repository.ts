@@ -6,6 +6,7 @@ import {
     TransactionType,
 } from '../db/entities/transaction.entity';
 import { Repository } from 'typeorm';
+import { TransactionException } from '@/domain/exception/transaction-exception.enum';
 
 @Injectable()
 export class TransactionRepository {
@@ -39,7 +40,7 @@ export class TransactionRepository {
             relations: ['owner'],
         });
         if (!transaction) {
-            throw new Error('Transaction Not Found');
+            throw new Error(TransactionException.TransactionNotFound);
         }
         await this.transactionDbRepository.save({ id, status, taxPercentage });
         return transaction;

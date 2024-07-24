@@ -11,7 +11,7 @@
           "classValidatorShim": true,
           "dtoFileNameSuffix": [
             ".dto.ts",
-            ".model.ts",
+            ".entity.ts",
             ".interface.ts"
           ],
           "controllerFileNameSuffix": ".controller.ts",

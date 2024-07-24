@@ -10,6 +10,7 @@ import { AverageBalanceUseCase } from './average-balance.use-case';
 import { SnapshotQueueService } from '@/infrastructure/services/bull/snapshot-queue.service';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
 import { StakingRoundQueueService } from '@/infrastructure/services/bull/staking-round-queue.service';
+import { StakingRoundException } from '@/domain/exception/staking-round-exception.enum';
 
 @Injectable()
 export class SnapshotUseCase
@@ -45,7 +46,7 @@ export class SnapshotUseCase
             firstDayOfMonthDate,
         );
         if (!stakingRound) {
-            throw new Error('StakingRoundNotFound');
+            throw new Error(StakingRoundException.StakingRoundNotFound);
         }
         const isRoundConcluded = snapshotDate === endDayOfMonthDate;
         await this.snapshotQueueService.addJob({

@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { DepositUseCase } from '../transaction/deposit.use-case';
 import { StakingRoundStatus } from '@/infrastructure/db/entities/staking-round.entity';
 import { Transactional } from 'typeorm-transactional';
+import { StakingRoundException } from '@/domain/exception/staking-round-exception.enum';
 
 @Injectable()
 export class ProfitDistributionUseCase implements ProfitDistributionIntractor {
@@ -20,10 +21,10 @@ export class ProfitDistributionUseCase implements ProfitDistributionIntractor {
             stakingRoundId,
         );
         if (!stakingRound) {
-            throw new Error('StakingRoundMissing');
+            throw new Error(StakingRoundException.StakingRoundNotFound);
         }
         if (!stakingRound.ratePercentage) {
-            throw new Error('RatePercentageMissing');
+            throw new Error(StakingRoundException.RatePercentageMissing);
         }
         const stakingRoundBalances =
             await this.roundBalanceRepository.findRoundBalances(stakingRoundId);

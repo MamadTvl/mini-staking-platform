@@ -21,6 +21,8 @@ import { User } from '@/infrastructure/db/entities/user.entity';
 import { WithdrawalUseCase } from '@/use-case/transaction/withdrawal.use-case';
 import { ApproveTransactionDto, RejectTransactionDto } from './dto/review.dto';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiPaginatedResponse } from '@/domain/response/api-paginated-response.decorator';
+import { ApiBoolResponse } from '@/domain/response/api-response.decorator';
 
 @ApiSecurity('user-auth')
 @ApiTags('Transaction')
@@ -32,6 +34,7 @@ export class TransactionController {
         private readonly withdrawalUseCase: WithdrawalUseCase,
     ) {}
 
+    @ApiPaginatedResponse(Transaction)
     @Get('review')
     @Roles()
     @UseGuards(JwtAuthGuard, RoleGuard)
@@ -47,6 +50,7 @@ export class TransactionController {
         });
     }
 
+    @ApiBoolResponse()
     @Patch('approve')
     @Roles()
     @UseGuards(JwtAuthGuard, RoleGuard)
@@ -58,6 +62,7 @@ export class TransactionController {
         return true;
     }
 
+    @ApiBoolResponse()
     @Patch('reject')
     @Roles()
     @UseGuards(JwtAuthGuard, RoleGuard)
@@ -68,6 +73,7 @@ export class TransactionController {
         return true;
     }
 
+    @ApiBoolResponse({ status: 201 })
     @Post('deposit')
     @UseGuards(JwtAuthGuard)
     async deposit(@Body() dto: TransferDto, @ReqUser() user: User) {
@@ -78,6 +84,7 @@ export class TransactionController {
         return true;
     }
 
+    @ApiBoolResponse({ status: 201 })
     @Post('withdraw')
     @UseGuards(JwtAuthGuard)
     async withdraw(@Body() dto: TransferDto, @ReqUser() user: User) {

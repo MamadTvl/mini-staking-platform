@@ -4,6 +4,11 @@ import { RoundUseCase } from '@/use-case/staking-round/round.use-case';
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { AddProfitRateDto } from './dto/profit-rate.dto';
+import {
+    ApiArrayResponse,
+    ApiBoolResponse,
+} from '@/domain/response/api-response.decorator';
+import { StakingRound } from '@/infrastructure/db/entities/staking-round.entity';
 
 @ApiSecurity('user-auth')
 @ApiTags('Staking Round')
@@ -15,11 +20,13 @@ export class StakingRoundController {
         private readonly profitRateUseCase: ProfitRateUseCase,
     ) {}
 
+    @ApiArrayResponse(StakingRound)
     @Get()
     async getMany() {
         return this.roundUseCase.getMany();
     }
 
+    @ApiBoolResponse()
     @Patch('profit-rate')
     async addProfitRate(@Body() dto: AddProfitRateDto) {
         await this.profitRateUseCase.addProfitRate(

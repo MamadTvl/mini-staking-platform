@@ -1,4 +1,5 @@
 import { JwtPayload } from '@/domain/adapter/jwt.interface';
+import { AuthException } from '@/domain/exception/auth-exception.enum';
 import { RegisterIntractor } from '@/domain/intractor/auth/register.intractor';
 import { UserRepository } from '@/infrastructure/repository/user.repository';
 import { BcryptService } from '@/infrastructure/services/bcrypt/bcrypt.service';
@@ -16,7 +17,7 @@ export class RegisterUseCase implements RegisterIntractor {
     async execute(username: string, password: string): Promise<string> {
         const alreadyExists = await this.userRepository.isExist(username);
         if (alreadyExists) {
-            throw new Error('alreadyExists');
+            throw new Error(AuthException.UsernameAlreadyExists);
         }
         const hashedPassword = await this.bcryptService.hash(password);
         const { id } = await this.userRepository.save(username, hashedPassword);

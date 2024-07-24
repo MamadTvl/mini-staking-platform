@@ -1,3 +1,4 @@
+import { StakingRoundException } from '@/domain/exception/staking-round-exception.enum';
 import { ProfitRateIntractor } from '@/domain/intractor/staking-round/profit-rate.intractor';
 import { StakingRoundRepository } from '@/infrastructure/repository/staking-round.repository';
 import { ProfitQueueService } from '@/infrastructure/services/bull/profit-queue.service';
@@ -14,7 +15,7 @@ export class ProfitRateUseCase implements ProfitRateIntractor {
     async addProfitRate(id: number, percentage: number): Promise<void> {
         const stakingRound = await this.stakingRoundRepository.findOne(id);
         if (stakingRound) {
-            throw new Error('NotFound');
+            throw new Error(StakingRoundException.StakingRoundNotFound);
         }
         if (moment(stakingRound.date, 'YYYY-MM-DD').isAfter(moment())) {
             throw new Error('NotYet');
