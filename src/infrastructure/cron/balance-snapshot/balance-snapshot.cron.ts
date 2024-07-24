@@ -7,7 +7,7 @@ import * as moment from 'moment';
 export class BalanceSnapshotCron {
     constructor(private readonly snapshotUseCase: SnapshotUseCase) {}
 
-    @Cron('* * 0 * * *', {
+    @Cron('59 23 * * *', {
         utcOffset: 0,
     })
     async triggerSnapshot() {
